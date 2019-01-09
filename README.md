@@ -9,9 +9,11 @@ Since omdbapi put their API behind a free key, moving this module to a standalon
 
 ## Usage
 ```
-# Gets movie info
+# Get Movie info
 .imdb Citizen Kane
 [Movie] Title: Citizen Kane | Year: 1941 | Rating: 8.4 | Genre: Drama, Mystery | IMDB Link: http://imdb.com/title/tt0033467
+
+# Get TV Series info
 .imdb Chuck
 [Series] Title: Chuck | Seasons: 5 | Year: 2007–2012 | Rating: 8.2 | Genre: Action, Comedy, Drama | IMDB Link: http://imdb.com/title/tt0934814
 ```
