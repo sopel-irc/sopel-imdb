@@ -19,11 +19,6 @@ Since omdbapi put their API behind a free key, moving this module to a standalon
 ```
 
 ## Requirements
-#### Ubuntu Requirements
-```
-apt install enchant
-```
-#### Python Requirements
 ```
 requests
 sopel
