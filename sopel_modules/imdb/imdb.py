@@ -47,6 +47,7 @@ def shutdown(bot):
 @example('.imdb ThisTitleDoesNotExist', '[Error] Movie not found!')
 @example('.imdb Citizen Kane', '[Movie] Title: Citizen Kane | Year: 1941 | Rating: 8.3 | Tomatometer: 100% | Genre: Drama, Mystery | Plot: Following the death of a publishing tycoon, news reporters scramble to discover the meaning of his final utterance. | IMDB Link: http://imdb.com/title/tt0033467')
 @example('.imdb Chuck', '[Series] Title: Chuck | Seasons: 5 | Year: 2007–2012 | Rating: 8.2 | Genre: Action, Comedy, Drama | Plot: When a twenty-something computer geek inadvertently downloads critical government secrets into his brain, the C.I.A. and the N.S.A. assign two age[…] | IMDB Link: http://imdb.com/title/tt0934814')
+@example('.imdb Death Wish 1974', '[Movie] Title: Death Wish | Year: 1974 | Rating: 7.0 | Tomatometer: 65% | Genre: Action, Crime, Drama, Thriller | Plot: A New York City architect becomes a one-man vigilante squad after his wife is murdered by street punks in which he randomly goes out[…] | IMDB Link: http://imdb.com/title/tt0071402')
 def imdb(bot, trigger):
     """
     Returns some information about a movie or series, like Title, Year, Rating, Genre and IMDB Link.
