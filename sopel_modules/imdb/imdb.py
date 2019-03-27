@@ -7,19 +7,21 @@ from __future__ import unicode_literals, absolute_import, print_function, divisi
 
 import re
 import requests
-from sopel.module import commands, example
+from sopel.module import commands, example, rule
 from sopel.config.types import StaticSection, ValidatedAttribute
 from sopel.logger import get_logger
+from sopel.tools import SopelMemory
 
 
 LOGGER = get_logger(__name__)
 
-yearfmt = re.compile('\(?(\d{4})\)?')
-imdb_re = re.compile('.*(https?:\/\/(www\.)?imdb\.com\/title\/)(tt[0-9]+).*')
+yearfmt = re.compile(r'\(?(\d{4})\)?')
+imdb_re = re.compile(r'.*(https?:\/\/(www\.)?imdb\.com\/title\/)(tt[0-9]+).*')
 
 
 class IMDBSection(StaticSection):
     api_key = ValidatedAttribute('api_key', str, default='')
+
 
 # Walk the user through defining variables required
 def configure(config):
@@ -29,14 +31,17 @@ def configure(config):
         'Enter omdbapi.com API Key:'
     )
 
+
 def setup(bot):
-    bot.config.define_section('imdb', IMDBSection)    
+    bot.config.define_section('imdb', IMDBSection)
     if not bot.memory.contains('url_callbacks'):
-        bot.memory['url_callbacks'] = tools.SopelMemory()
+        bot.memory['url_callbacks'] = SopelMemory()
     bot.memory['url_callbacks'][imdb_re] = imdb_re
+
 
 def shutdown(bot):
     del bot.memory['url_callbacks'][imdb_re]
+
 
 @commands('imdb', 'movie')
 @example('.imdb ThisTitleDoesNotExist', '[Error] Movie not found!')
@@ -46,13 +51,13 @@ def imdb(bot, trigger):
     """
     Returns some information about a movie or series, like Title, Year, Rating, Genre and IMDB Link.
     """
-    if bot.config.imdb.api_key is None or bot.config.imdb.api_key is '':
+    if bot.config.imdb.api_key is None or bot.config.imdb.api_key == '':
         return bot.reply("OMDb API key missing. Please configure this module.")
 
     if not trigger.group(2):
         return
     word = trigger.group(2).rstrip()
-    params={}
+    params = {}
 
     # check to see if there is a year e.g. (2017) at the end
     last = word.split()[-1]
@@ -63,6 +68,7 @@ def imdb(bot, trigger):
 
     params['t'] = word
     bot.say(run_omdb_query(params, bot.config.core.verify_ssl, bot.config.imdb.api_key, True))
+
 
 def run_omdb_query(params, verify_ssl, api_key, add_url=True):
     uri = "http://www.omdbapi.com/"
@@ -83,7 +89,6 @@ def run_omdb_query(params, verify_ssl, api_key, add_url=True):
                 str(params), str(data))
             message = '[Error] Got an error from OMDbapi'
     else:
-        data = data.json()
         if data['Type'] == 'movie':
             message = '[Movie] Title: ' + data['Title']
         elif data['Type'] == 'series':
@@ -91,11 +96,11 @@ def run_omdb_query(params, verify_ssl, api_key, add_url=True):
                       ' | Seasons: ' + data['totalSeasons']
 
         message += ' | Year: ' + data['Year'] + \
-                  ' | Rating: ' + data['imdbRating']
+                   ' | Rating: ' + data['imdbRating']
         for rating in data['Ratings']:
             if rating['Source'] == 'Rotten Tomatoes':
                 message += ' | Tomatometer: ' + rating['Value']
-        
+
         message += ' | Genre: ' + data['Genre'] + \
                    ' | Plot: {}'
 
@@ -104,20 +109,21 @@ def run_omdb_query(params, verify_ssl, api_key, add_url=True):
 
         plot = data['Plot']
         if len(message.format(plot)) > 300:
-            cliplen = 300 - (len(message) - 2 + 3) # remove {} add […]
+            cliplen = 300 - (len(message) - 2 + 3)  # remove {} add […]
             plot = plot[:cliplen] + '[…]'
         message = message.format(plot)
     return message
 
-@sopel.module.rule('.*(imdb\.com\/title\/)(tt[0-9]+).*')
+
+@rule(imdb_re)
 def imdb_url(bot, trigger, found_match=None):
     match = found_match or trigger
 
-    if bot.config.imdb.api_key is None or bot.config.imdb.api_key is '':
+    if bot.config.imdb.api_key is None or bot.config.imdb.api_key == '':
         return bot.reply("OMDb API key missing. Please configure this module.")
 
-    bot.say(run_omdb_query({'i': match.group(2)},
-                            bot.config.core.verify_ssl, bot.config.imdb.api_key, False))
+    bot.say(run_omdb_query({'i': match.group(3)}, bot.config.core.verify_ssl, bot.config.imdb.api_key, False))
+
 
 if __name__ == "__main__":
     from sopel.test_tools import run_example_tests
