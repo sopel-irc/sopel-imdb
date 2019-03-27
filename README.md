@@ -1,5 +1,5 @@
 [![PyPI version](https://badge.fury.io/py/sopel-modules.imdb.svg)](https://badge.fury.io/py/sopel-modules.imdb)
-[![Build Status](https://travis-ci.org/RustyBower/sopel-imdb.svg?branch=master)](https://travis-ci.org/RustyBower/sopel-imdb)
+[![Build Status](https://travis-ci.com/RustyBower/sopel-imdb.svg?branch=master)](https://travis-ci.com/RustyBower/sopel-imdb)
 [![Coverage Status](https://coveralls.io/repos/github/RustyBower/sopel-imdb/badge.svg?branch=master)](https://coveralls.io/github/RustyBower/sopel-imdb?branch=master)
 
 # sopel-imdb
