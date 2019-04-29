@@ -95,6 +95,12 @@ def run_omdb_query(params, verify_ssl, api_key, add_url=True):
         elif data['Type'] == 'series':
             message = '[Series] Title: ' + data['Title'] + \
                       ' | Seasons: ' + data['totalSeasons']
+        elif data['Type'] == 'episode':
+            parent = requests.get(uri, params={'i': data["seriesID"], 'apikey': api_key}, timeout=30, verify=verify_ssl)
+            parent = parent.json()
+            message = '[Episode] Title: ' + parent['Title'] + \
+                      ' | Episode: ' + data['Title'] + \
+                      ' (' + data['Season'] + 'x' + data['Episode'] + ')'
 
         message += ' | Year: ' + data['Year'] + \
                    ' | Rating: ' + data['imdbRating']
