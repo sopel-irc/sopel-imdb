@@ -34,7 +34,9 @@ def configure(config):
 
 def setup(bot):
     bot.config.define_section('imdb', IMDBSection)
-    bot.register_url_callback(imdb_re, imdb_url)
+    if not bot.memory.contains('url_callbacks'):
+        bot.memory['url_callbacks'] = SopelMemory()
+    bot.memory['url_callbacks'][imdb_re] = imdb_re
 
 
 def shutdown(bot):
