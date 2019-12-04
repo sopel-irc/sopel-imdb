@@ -34,9 +34,7 @@ def configure(config):
 
 def setup(bot):
     bot.config.define_section('imdb', IMDBSection)
-    if not bot.memory.contains('url_callbacks'):
-        bot.memory['url_callbacks'] = SopelMemory()
-    bot.memory['url_callbacks'][imdb_re] = imdb_re
+    bot.register_url_callback(imdb_re, imdb_url)
 
 
 def shutdown(bot):
@@ -74,14 +72,13 @@ def imdb(bot, trigger):
 def run_omdb_query(params, verify_ssl, api_key, add_url=True):
     uri = "http://www.omdbapi.com/"
     if 'i' in params:
-        data = requests.get(uri, params={'i': 'tt{}'.format(params['i']), 'apikey': api_key}, timeout=30, verify=verify_ssl)
+        data = requests.get(uri, params={'i': params['i'], 'apikey': api_key}, timeout=30, verify=verify_ssl)
     elif 'y' in params:
         data = requests.get(uri, params={'t': params['t'], 'y': params['y'], 'apikey': api_key}, timeout=30, verify=verify_ssl)
     else:
         data = requests.get(uri, params={'t': params['t'], 'apikey': api_key}, timeout=30, verify=verify_ssl)
 
     data = data.json()
-    print(data)
     if data['Response'] == 'False':
         if 'Error' in data:
             message = '[Error] %s' % data['Error']
