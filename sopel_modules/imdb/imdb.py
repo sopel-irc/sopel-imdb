@@ -7,16 +7,14 @@ from __future__ import unicode_literals, absolute_import, print_function, divisi
 
 import re
 import requests
-from sopel.module import commands, example, rule
+from sopel.module import commands, example, url
 from sopel.config.types import StaticSection, ValidatedAttribute
 from sopel.logger import get_logger
-from sopel.tools import SopelMemory
 
 
 LOGGER = get_logger(__name__)
 
 yearfmt = re.compile(r'\(?(\d{4})\)?')
-imdb_re = re.compile(r'.*(https?:\/\/(www\.)?imdb\.com\/title\/)(tt[0-9]+).*')
 
 
 class IMDBSection(StaticSection):
@@ -34,13 +32,6 @@ def configure(config):
 
 def setup(bot):
     bot.config.define_section('imdb', IMDBSection)
-    if not bot.memory.contains('url_callbacks'):
-        bot.memory['url_callbacks'] = SopelMemory()
-    bot.memory['url_callbacks'][imdb_re] = imdb_re
-
-
-def shutdown(bot):
-    del bot.memory['url_callbacks'][imdb_re]
 
 
 @commands('imdb', 'movie')
@@ -122,14 +113,12 @@ def run_omdb_query(params, verify_ssl, api_key, add_url=True):
     return message
 
 
-@rule(imdb_re)
-def imdb_url(bot, trigger, found_match=None):
-    match = found_match or trigger
-
+@url(r'https?:\/\/(?:www\.)?imdb\.com\/title\/(tt[0-9]+)')
+def imdb_url(bot, trigger, match=None):
     if bot.config.imdb.api_key is None or bot.config.imdb.api_key == '':
         return bot.reply("OMDb API key missing. Please configure this module.")
 
-    bot.say(run_omdb_query({'i': match.group(3)}, bot.config.core.verify_ssl, bot.config.imdb.api_key, False))
+    bot.say(run_omdb_query({'i': match.group(1)}, bot.config.core.verify_ssl, bot.config.imdb.api_key, False))
 
 
 if __name__ == "__main__":
