@@ -3,7 +3,7 @@ coveralls
 flake8
 mock
 pycodestyle
-pytest>=3.6
+pytest
 pytest-cov
 requests_mock
 sopel
