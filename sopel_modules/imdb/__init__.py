@@ -8,4 +8,4 @@ from .imdb import imdb, imdb_url
 
 __author__ = 'Rusty Bower'
 __email__ = 'rusty@rustybower.com'
-__version__ = '1.1.2'
+__version__ = '1.2.0'
