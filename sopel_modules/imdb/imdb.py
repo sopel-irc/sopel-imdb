@@ -8,7 +8,7 @@ from __future__ import unicode_literals, absolute_import, print_function, divisi
 import re
 import requests
 from sopel.module import commands, example, url
-from sopel.config.types import StaticSection, ValidatedAttribute
+from sopel.config.types import NO_DEFAULT, StaticSection, ValidatedAttribute
 from sopel.logger import get_logger
 
 
@@ -18,7 +18,7 @@ yearfmt = re.compile(r'\(?(\d{4})\)?')
 
 
 class IMDBSection(StaticSection):
-    api_key = ValidatedAttribute('api_key', str, default='')
+    api_key = ValidatedAttribute('api_key', str, default=NO_DEFAULT)
 
 
 # Walk the user through defining variables required
