@@ -4,6 +4,8 @@
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/RustyBower/sopel-imdb.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/RustyBower/sopel-imdb/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/RustyBower/sopel-imdb.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/RustyBower/sopel-imdb/context:python)
 
+**Maintainer:** [@RustyBower](https://github.com/rustybower)
+
 # sopel-imdb
 sopel-imdb is an movie lookup module for Sopel.
 
