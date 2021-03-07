@@ -43,8 +43,11 @@ def imdb(bot, trigger):
     """
     Returns some information about a movie or series, like Title, Year, Rating, Genre and IMDB Link.
     """
-    if bot.config.imdb.api_key is None or bot.config.imdb.api_key == '':
-        return bot.reply("OMDb API key missing. Please configure this module.")
+    try:
+        if bot.config.imdb.api_key is None or bot.config.imdb.api_key == '':
+            return bot.reply("OMDb API key missing. Please configure this plugin.")
+    except AttributeError:
+        return bot.reply("Missing imdb plugin config section. Please configure it.")
 
     if not trigger.group(2):
         return
