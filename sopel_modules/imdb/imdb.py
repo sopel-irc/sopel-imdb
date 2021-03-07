@@ -58,7 +58,13 @@ def imdb(bot, trigger):
         params['y'] = yrm.group(1)
         word = ' '.join(word.split()[:-1])
 
-    params['t'] = word
+    if word.startswith('tt') and len(word.split()) == 1:
+        # handle queries for IMDB IDs
+        params['i'] = word
+    else:
+        # standard title query
+        params['t'] = word
+
     bot.say(run_omdb_query(params, bot.config.core.verify_ssl, bot.config.imdb.api_key, True))
 
 
