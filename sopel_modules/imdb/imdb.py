@@ -7,20 +7,18 @@ from __future__ import unicode_literals, absolute_import, print_function, divisi
 
 import re
 import requests
-from sopel.module import commands, example, rule
-from sopel.config.types import StaticSection, ValidatedAttribute
+from sopel.module import commands, example, url
+from sopel.config.types import NO_DEFAULT, StaticSection, ValidatedAttribute
 from sopel.logger import get_logger
-from sopel.tools import SopelMemory
 
 
 LOGGER = get_logger(__name__)
 
 yearfmt = re.compile(r'\(?(\d{4})\)?')
-imdb_re = re.compile(r'.*(https?:\/\/(www\.)?imdb\.com\/title\/)(tt[0-9]+).*')
 
 
 class IMDBSection(StaticSection):
-    api_key = ValidatedAttribute('api_key', str, default='')
+    api_key = ValidatedAttribute('api_key', str, default=NO_DEFAULT)
 
 
 # Walk the user through defining variables required
@@ -34,13 +32,6 @@ def configure(config):
 
 def setup(bot):
     bot.config.define_section('imdb', IMDBSection)
-    if not bot.memory.contains('url_callbacks'):
-        bot.memory['url_callbacks'] = SopelMemory()
-    bot.memory['url_callbacks'][imdb_re] = imdb_re
-
-
-def shutdown(bot):
-    del bot.memory['url_callbacks'][imdb_re]
 
 
 @commands('imdb', 'movie')
@@ -52,8 +43,11 @@ def imdb(bot, trigger):
     """
     Returns some information about a movie or series, like Title, Year, Rating, Genre and IMDB Link.
     """
-    if bot.config.imdb.api_key is None or bot.config.imdb.api_key == '':
-        return bot.reply("OMDb API key missing. Please configure this module.")
+    try:
+        if bot.config.imdb.api_key is None or bot.config.imdb.api_key == '':
+            return bot.reply("OMDb API key missing. Please configure this plugin.")
+    except AttributeError:
+        return bot.reply("Missing imdb plugin config section. Please configure it.")
 
     if not trigger.group(2):
         return
@@ -67,7 +61,13 @@ def imdb(bot, trigger):
         params['y'] = yrm.group(1)
         word = ' '.join(word.split()[:-1])
 
-    params['t'] = word
+    if word.startswith('tt') and len(word.split()) == 1:
+        # handle queries for IMDB IDs
+        params['i'] = word
+    else:
+        # standard title query
+        params['t'] = word
+
     bot.say(run_omdb_query(params, bot.config.core.verify_ssl, bot.config.imdb.api_key, True))
 
 
@@ -95,6 +95,12 @@ def run_omdb_query(params, verify_ssl, api_key, add_url=True):
         elif data['Type'] == 'series':
             message = '[Series] Title: ' + data['Title'] + \
                       ' | Seasons: ' + data['totalSeasons']
+        elif data['Type'] == 'episode':
+            parent = requests.get(uri, params={'i': data["seriesID"], 'apikey': api_key}, timeout=30, verify=verify_ssl)
+            parent = parent.json()
+            message = '[Episode] Title: ' + parent['Title'] + \
+                      ' | Episode: ' + data['Title'] + \
+                      ' (' + data['Season'] + 'x' + data['Episode'] + ')'
 
         message += ' | Year: ' + data['Year'] + \
                    ' | Rating: ' + data['imdbRating']
@@ -116,14 +122,12 @@ def run_omdb_query(params, verify_ssl, api_key, add_url=True):
     return message
 
 
-@rule(imdb_re)
-def imdb_url(bot, trigger, found_match=None):
-    match = found_match or trigger
-
+@url(r'https?:\/\/(?:www\.)?imdb\.com\/title\/(tt[0-9]+)')
+def imdb_url(bot, trigger, match=None):
     if bot.config.imdb.api_key is None or bot.config.imdb.api_key == '':
         return bot.reply("OMDb API key missing. Please configure this module.")
 
-    bot.say(run_omdb_query({'i': match.group(3)}, bot.config.core.verify_ssl, bot.config.imdb.api_key, False))
+    bot.say(run_omdb_query({'i': match.group(1)}, bot.config.core.verify_ssl, bot.config.imdb.api_key, False))
 
 
 if __name__ == "__main__":
