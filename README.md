@@ -1,8 +1,7 @@
+[![Python Tests](https://github.com/sopel-irc/sopel-imdb/actions/workflows/python-tests.yml/badge.svg?branch=master)](https://github.com/sopel-irc/sopel-imdb/actions/workflows/python-tests.yml)
 [![PyPI version](https://badge.fury.io/py/sopel-modules.imdb.svg)](https://badge.fury.io/py/sopel-modules.imdb)
-[![Build Status](https://travis-ci.com/RustyBower/sopel-imdb.svg?branch=master)](https://travis-ci.com/RustyBower/sopel-imdb)
-[![Coverage Status](https://coveralls.io/repos/github/RustyBower/sopel-imdb/badge.svg?branch=master)](https://coveralls.io/github/RustyBower/sopel-imdb?branch=master)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/RustyBower/sopel-imdb.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/RustyBower/sopel-imdb/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/RustyBower/sopel-imdb.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/RustyBower/sopel-imdb/context:python)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/sopel-irc/sopel-imdb.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sopel-irc/sopel-imdb/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/sopel-irc/sopel-imdb.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sopel-irc/sopel-imdb/context:python)
 
 **Maintainer:** [@RustyBower](https://github.com/rustybower)
 
