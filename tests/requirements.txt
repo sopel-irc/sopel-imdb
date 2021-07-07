@@ -1,9 +1,0 @@
-codeclimate-test-reporter
-coveralls
-flake8
-mock
-pycodestyle
-pytest>=4.6
-pytest-cov
-requests_mock
-sopel

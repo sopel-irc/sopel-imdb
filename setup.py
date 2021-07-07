@@ -15,21 +15,15 @@ if __name__ == '__main__':
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-with open('NEWS') as history_file:
-    history = history_file.read()
-
 with open('requirements.txt') as requirements_file:
     requirements = [req for req in requirements_file.readlines()]
-
-with open('tests/requirements.txt') as dev_requirements_file:
-    dev_requirements = [req for req in dev_requirements_file.readlines()]
 
 
 setup(
     name='sopel_modules.imdb',
     version='1.2.1',
     description='A working re-implementation of the imdb module for Sopel',
-    long_description=readme + '\n\n' + history,
+    long_description=readme,
     long_description_content_type='text/markdown',  # This is important!
     author='Rusty Bower',
     author_email='rusty@rustybower.com',
@@ -38,7 +32,5 @@ setup(
     namespace_packages=['sopel_modules'],
     include_package_data=True,
     install_requires=requirements,
-    tests_require=dev_requirements,
-    test_suite='tests',
     license='MIT License',
 )
