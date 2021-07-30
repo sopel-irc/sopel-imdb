@@ -21,7 +21,7 @@ with open('requirements.txt') as requirements_file:
 
 setup(
     name='sopel_modules.imdb',
-    version='1.2.1',
+    version='1.2.2',
     description='A working re-implementation of the imdb module for Sopel',
     long_description=readme,
     long_description_content_type='text/markdown',  # This is important!
