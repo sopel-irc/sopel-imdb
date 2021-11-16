@@ -122,7 +122,7 @@ def run_omdb_query(params, verify_ssl, api_key, add_url=True):
     return message
 
 
-@url(r'https?:\/\/(?:www\.)?imdb\.com\/title\/(tt[0-9]+)')
+@url(r'https?:\/\/(?:m\.|www\.)?imdb\.com\/title\/(tt[0-9]+)')
 def imdb_url(bot, trigger, match=None):
     if bot.config.imdb.api_key is None or bot.config.imdb.api_key == '':
         return bot.reply("OMDb API key missing. Please configure this module.")
