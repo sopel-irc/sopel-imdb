@@ -24,5 +24,5 @@ Since omdbapi put their API behind a free key, moving this module to a standalon
 ## Requirements
 ```
 requests
-sopel
+sopel>=8
 ```

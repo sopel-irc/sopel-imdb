@@ -1,18 +1,20 @@
 # coding=utf-8
+"""A working re-implementation of the imdb module for Sopel"""
 # Copyright 2008, Sean B. Palmer, inamidst.com
 # Copyright 2012, Elsie Powell, embolalia.com
 # Copyright 2018, Rusty Bower, rustybower.com
 # Licensed under the Eiffel Forum License 2.
-from __future__ import unicode_literals, absolute_import, print_function, division
+from __future__ import annotations
 
 import re
-import requests
-from sopel.module import commands, example, url
+
+from sopel.plugin import command, example, url
 from sopel.config.types import NO_DEFAULT, StaticSection, ValidatedAttribute
-from sopel.logger import get_logger
+from sopel.tools import get_logger
+import requests
 
 
-LOGGER = get_logger(__name__)
+LOGGER = get_logger('imdb')
 
 yearfmt = re.compile(r'\(?(\d{4})\)?')
 
@@ -34,7 +36,7 @@ def setup(bot):
     bot.config.define_section('imdb', IMDBSection)
 
 
-@commands('imdb', 'movie')
+@command('imdb', 'movie')
 @example('.imdb ThisTitleDoesNotExist', '[Error] Movie not found!')
 @example('.imdb Citizen Kane', '[Movie] Title: Citizen Kane | Year: 1941 | Rating: 8.3 | Tomatometer: 100% | Genre: Drama, Mystery | Plot: Following the death of a publishing tycoon, news reporters scramble to discover the meaning of his final utterance. | IMDB Link: http://imdb.com/title/tt0033467')
 @example('.imdb Chuck', '[Series] Title: Chuck | Seasons: 5 | Year: 2007–2012 | Rating: 8.2 | Genre: Action, Comedy, Drama | Plot: When a twenty-something computer geek inadvertently downloads critical government secrets into his brain, the C.I.A. and the N.S.A. assign two age[…] | IMDB Link: http://imdb.com/title/tt0934814')
@@ -128,8 +130,3 @@ def imdb_url(bot, trigger, match=None):
         return bot.reply("OMDb API key missing. Please configure this module.")
 
     bot.say(run_omdb_query({'i': match.group(1)}, bot.config.core.verify_ssl, bot.config.imdb.api_key, False))
-
-
-if __name__ == "__main__":
-    from sopel.test_tools import run_example_tests
-    run_example_tests(__file__)
