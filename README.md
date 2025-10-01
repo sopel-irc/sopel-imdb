@@ -12,6 +12,12 @@ Since omdbapi put their API behind a free key, moving this module to a standalon
 
 ## Usage
 ```
+# Update your sopel config with the OMDb API key
+[imdb]
+api_key = 12345678
+```
+
+```
 # Get Movie info
 .imdb Citizen Kane
 [Movie] Title: Citizen Kane | Year: 1941 | Rating: 8.4 | Genre: Drama, Mystery | IMDB Link: http://imdb.com/title/tt0033467
